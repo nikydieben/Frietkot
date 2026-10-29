@@ -82,6 +82,10 @@ Lukt het lokaal niet? Open je branch in StackBlitz, zonder iets te installeren:
 | `06-finale`   | [openen](https://stackblitz.com/github/nikydieben/Frietkot/tree/06-finale) |
 | `solution`    | [openen](https://stackblitz.com/github/nikydieben/Frietkot/tree/solution) |
 
+## Spiekbrief
+
+Vast op een begrip? [SPIEKBRIEF.md](SPIEKBRIEF.md) vat per blok samen wat je nodig hebt, met code.
+
 ## Bonusopdrachten
 
 Vroeg klaar? Zie [BONUS.md](BONUS.md).
