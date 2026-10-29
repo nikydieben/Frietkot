@@ -1,0 +1,12 @@
+# Frietkot: conventies voor AI-assistenten
+
+- React 19 + TypeScript met Vite. Enkel function components.
+- Feature-first: code per feature in `src/features/<feature>/` (menu, cart, admin, assistant), gedeelde code in `src/shared/`.
+- Routes staan centraal in `src/app/routes.tsx` (React Router v7, data mode). Een nieuwe pagina is een nieuwe route daar.
+- Gedeelde client state zit in een React Context in de feature, met een `use…()`-hook (zoals `CartProvider` en `useCart()` in `features/cart/CartContext.tsx`). Geen extra state-libraries.
+- Server state via TanStack Query (`useQuery`, `useMutation`). Nooit `fetch` in een component of in `useEffect`.
+- API-calls staan enkel in `src/shared/api/`, met een DTO-type en een mapper naar het UI-model.
+- De nep-API is MSW in `src/mocks/handlers.ts`: elk nieuw endpoint krijgt daar een handler.
+- Styling: enkel de bestaande klassen uit `src/index.css` (zie README). Geen nieuwe CSS-bestanden, geen inline styles.
+- Tests: Vitest + React Testing Library. Zoek elementen op rol (`getByRole`), niet op test-id. Render pagina's met `renderRoute` uit `src/test/render.tsx`.
+- Bedragen tonen met `formatPrice` uit `src/shared/format.ts`.
