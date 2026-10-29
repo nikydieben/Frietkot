@@ -1,46 +1,50 @@
+import { CartBadge } from '../features/cart/CartBadge'
+import { CartProvider } from '../features/cart/CartContext'
+import { CartSummary } from '../features/cart/CartSummary'
 import { MenuPage } from '../features/menu/MenuPage'
-// STAP 1: haal de // weg op de volgende regels
-// import { useState } from 'react'
-// import type { Snack } from '../shared/api/snacks'
-// import { addSnack } from '../features/cart/cartLines'
-// import type { CartLine } from '../features/cart/types'
-// import { CartSummary } from '../features/cart/CartSummary'
+// STAP 2: haal de // weg op de volgende regel
+// import { Outlet } from 'react-router'
 
 /*
-  OEFENING 2: STATE MANAGEMENT (22 minuten, per 2)
-  Vast? Kijk in SPIEKBRIEF.md onder "State management".
+  OEFENING 3: ROUTING (20 minuten, per 2)
+  Vast? Kijk in SPIEKBRIEF.md onder "Routing".
 
-  STAP 1  Maak het mandje met useState, hieronder in App:
-            const [lines, setLines] = useState<CartLine[]>([])
-  STAP 2  Schrijf een functie die een snack toevoegt (addSnack staat klaar):
-            function add(snack: Snack) { setLines(current => addSnack(current, snack)) }
-  STAP 3  Geef die functie door aan het menu: <MenuPage onAdd={add} />
-          Test: zet console.log(lines) in App en klik op "Toevoegen". In de console van de browser groeit de lijst.
-  STAP 4  Toon het aantal stuks in de header, met de klasse cart-badge.
-          Het aantal is derived state: tel de quantity van alle lijnen op met reduce.
-  STAP 5  Toon het mandje onder het menu: <CartSummary lines={lines} />
-          en vul in CartSummary.tsx het totaal in.
-  STAP 6  Als er tijd is: geef je nu veel door via props? De CartProvider in
-          features/cart/CartContext.tsx doet hetzelfde met Context. Zet <CartProvider>
-          rond de app en haal het mandje op met useCart() waar je het nodig hebt.
+  STAP 1  main.tsx: zet de router aan (haal de // weg) en vervang <App /> door
+          <RouterProvider router={router} />. De import van App mag dan weg.
+          De app werkt zoals voordien.
+  STAP 2  Hieronder: vervang alles in <main> door <Outlet />.
+          Daar komt de pagina van de huidige route: op / is dat het menu.
+  STAP 3  routes.tsx: zet de routes voor de detailpagina en het mandje aan.
+          Test door in de adresbalk /mandje en /snack/friet-groot te typen.
+  STAP 4  SnackDetailPage.tsx: haal de id uit de URL met useParams(), en toon
+          "Snack niet gevonden" voor een onbekende snack (probeer /snack/sushi).
+  STAP 5  Links: zet in de header <NavLink to="/">Menu</NavLink> en
+          <NavLink to="/mandje">Mandje</NavLink> in een <nav className="app-nav">.
+          Maak van de naam op SnackCard een <Link> naar /snack/ + de id.
+  STAP 6  Als er tijd is: filterknoppen per categorie in MenuPage,
+          met het filter in de URL (?categorie=frieten, zie useSearchParams).
 
-  Bonus: hetzelfde mandje met Jotai (zie BONUS.md).
+  Vroeg klaar? Doe de bonusopdracht uit BONUS.md.
 */
 export default function App() {
   return (
-    <div className="app">
-      <header className="app-header">
-        <span className="logo">🍟 Frietkot</span>
-        {/* STAP 4: het aantal stuks in je mandje */}
-      </header>
+    <CartProvider>
+      <div className="app">
+        <header className="app-header">
+          <span className="logo">🍟 Frietkot</span>
+          {/* STAP 5: de navigatie */}
+          <CartBadge />
+        </header>
 
-      <main className="app-main">
-        {/* STAP 3: geef hier jouw functie mee: onAdd={add} */}
-        <MenuPage onAdd={snack => console.info(`${snack.name} toevoegen`)} />
-        {/* STAP 5: het mandje */}
-      </main>
+        <main className="app-main">
+          {/* STAP 2: vervang alles in <main> door <Outlet /> */}
+          <MenuPage />
+          <h2>Mandje</h2>
+          <CartSummary />
+        </main>
 
-      <footer className="app-footer">Frietkot · React foundations voor .NET'ers</footer>
-    </div>
+        <footer className="app-footer">Frietkot · React foundations voor .NET'ers</footer>
+      </div>
+    </CartProvider>
   )
 }
