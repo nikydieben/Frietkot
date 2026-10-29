@@ -1,0 +1,15 @@
+[
+  { "id": "friet-klein", "display_name": "Kleine friet", "price_eur": 3.2, "category": "frieten", "is_vegetarian": true, "emoji": "🍟" },
+  { "id": "friet-medium", "display_name": "Middelgrote friet", "price_eur": 3.7, "category": "frieten", "is_vegetarian": true, "emoji": "🍟" },
+  { "id": "friet-groot", "display_name": "Grote friet", "price_eur": 4.1, "category": "frieten", "is_vegetarian": true, "emoji": "🍟" },
+  { "id": "frikandel", "display_name": "Frikandel", "price_eur": 2.8, "category": "snacks", "is_vegetarian": false, "emoji": "🌭" },
+  { "id": "bitterballen", "display_name": "Bitterballen (6)", "price_eur": 5.5, "category": "snacks", "is_vegetarian": false, "emoji": "🧆" },
+  { "id": "kaaskroket", "display_name": "Kaaskroket", "price_eur": 3.0, "category": "snacks", "is_vegetarian": true, "emoji": "🧀" },
+  { "id": "mexicano", "display_name": "Mexicano", "price_eur": 3.4, "category": "snacks", "is_vegetarian": false, "emoji": "🌶️" },
+  { "id": "loempia-veggie", "display_name": "Vegetarische loempia", "price_eur": 3.6, "category": "snacks", "is_vegetarian": true, "emoji": "🥟" },
+  { "id": "boulet", "display_name": "Boulet", "price_eur": 4.2, "category": "snacks", "is_vegetarian": false, "emoji": "🍖" },
+  { "id": "mayo", "display_name": "Mayonaise", "price_eur": 0.9, "category": "sauzen", "is_vegetarian": true, "emoji": "🥚" },
+  { "id": "andalouse", "display_name": "Andalouse", "price_eur": 0.9, "category": "sauzen", "is_vegetarian": true, "emoji": "🫑" },
+  { "id": "samurai", "display_name": "Samurai", "price_eur": 0.9, "category": "sauzen", "is_vegetarian": true, "emoji": "🔥" },
+  { "id": "stoofvleessaus", "display_name": "Stoofvleessaus", "price_eur": 1.6, "category": "sauzen", "is_vegetarian": false, "emoji": "🥘" }
+]
