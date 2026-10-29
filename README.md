@@ -17,6 +17,8 @@ npm run test:watch # tests in watch-modus
 
 Elke branch is de beginsituatie van een blok. Loop je achter? Check de volgende branch uit en je bent weer mee.
 
+Bij elk blok hoort ook een oplossing. `git diff 01-start 01-solution` toont precies wat je moest doen.
+
 | Branch         | Blok                       | Oplossing     |
 | -------------- | -------------------------- | ------------- |
 | `01-start`     | Foundations                | `01-solution` |
@@ -90,6 +92,10 @@ Lukt het lokaal niet? Open je branch in StackBlitz, zonder iets te installeren:
 | `06-testing`   | [openen](https://stackblitz.com/github/nikydieben/Frietkot/tree/06-testing) |
 | `07-bundling`  | [openen](https://stackblitz.com/github/nikydieben/Frietkot/tree/07-bundling) |
 | `solution`     | [openen](https://stackblitz.com/github/nikydieben/Frietkot/tree/solution) |
+
+## Spiekbrief
+
+Vast op een begrip? [SPIEKBRIEF.md](SPIEKBRIEF.md) vat per blok samen wat je nodig hebt, met code.
 
 ## Bonusopdrachten
 
