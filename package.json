@@ -12,6 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.105.0",
+    "jotai": "^3.0.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
