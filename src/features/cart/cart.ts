@@ -4,6 +4,10 @@ import type { CartLine } from './types'
 const FRIES_DISCOUNT = 0.1
 const FRIES_DISCOUNT_FROM = 3
 
+// Rekenen in centen: 0.1 + 0.2 is in JavaScript (en in C# met double) niet exact 0.3.
+const toCents = (euro: number) => Math.round(euro * 100)
+const toEuro = (cents: number) => cents / 100
+
 export function addSnack(lines: CartLine[], snack: Snack): CartLine[] {
   const existing = lines.find(line => line.snack.id === snack.id)
   return existing
@@ -12,7 +16,9 @@ export function addSnack(lines: CartLine[], snack: Snack): CartLine[] {
 }
 
 export function removeOne(lines: CartLine[], snackId: string): CartLine[] {
-  return lines.filter(line => line.snack.id !== snackId)
+  return lines
+    .map(line => (line.snack.id === snackId ? { ...line, quantity: line.quantity - 1 } : line))
+    .filter(line => line.quantity > 0)
 }
 
 export function itemCount(lines: CartLine[]): number {
@@ -23,18 +29,23 @@ function friesLines(lines: CartLine[]): CartLine[] {
   return lines.filter(line => line.snack.category === 'frieten')
 }
 
+function subtotalCents(lines: CartLine[]): number {
+  return lines.reduce((sum, line) => sum + toCents(line.snack.price) * line.quantity, 0)
+}
+
+function friesDiscountCents(lines: CartLine[]): number {
+  const fries = friesLines(lines)
+  return itemCount(fries) >= FRIES_DISCOUNT_FROM ? Math.round(subtotalCents(fries) * FRIES_DISCOUNT) : 0
+}
+
 export function subtotal(lines: CartLine[]): number {
-  return lines.reduce((sum, line) => sum + line.snack.price * line.quantity, 0)
+  return toEuro(subtotalCents(lines))
 }
 
 export function friesDiscount(lines: CartLine[]): number {
-  const fries = friesLines(lines)
-  if (itemCount(fries) > FRIES_DISCOUNT_FROM) {
-    return subtotal(fries) * FRIES_DISCOUNT
-  }
-  return 0
+  return toEuro(friesDiscountCents(lines))
 }
 
 export function cartTotal(lines: CartLine[]): number {
-  return subtotal(lines) - friesDiscount(lines)
+  return toEuro(subtotalCents(lines) - friesDiscountCents(lines))
 }
