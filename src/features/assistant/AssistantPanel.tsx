@@ -1,63 +1,54 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 import { useChat } from '@ai-sdk/react'
-import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from 'ai'
+import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls, type UIMessage } from 'ai'
+import { toSnack, type SnackDto } from '../../shared/api/snacks'
+import { useCart } from '../cart/CartContext'
+import { SnackCard } from '../menu/SnackCard'
+import { useSnacks } from '../menu/useSnacks'
 import { ASSISTANT_API } from './config'
-// STAP 2: haal de // weg op de volgende 3 regels
-// import { toSnack, type SnackDto } from '../../shared/api/snacks'
-// import { SnackCard } from '../menu/SnackCard'
-// import { useCart } from '../cart/CartContext'
-// STAP 3: haal de // weg op de volgende regel
-// import { useSnacks } from '../menu/useSnacks'
-// STAP 4: haal de // weg op de volgende regel
-// import { useNavigate } from 'react-router'
+
+type CartItem = { id: string; quantity: number }
 
 const transport = new DefaultChatTransport({ api: ASSISTANT_API })
 
-/*
-  OEFENING 5: FINALE, DE FRIETKOT-ASSISTENT (30 minuten, per 2)
-  Vast? Kijk in SPIEKBRIEF.md onder "Finale".
-
-  De chat werkt al: open het paneel, stel een vraag en kijk in de console wat er binnenkomt.
-  Jij maakt de antwoorden zichtbaar en laat de assistent iets doen.
-
-  STAP 1  Toon de tekst van elk bericht: loop over message.parts
-          en toon part.text als part.type === 'text'.
-  STAP 2  Toon de voorgestelde snacks: bij part.type === 'tool-showSnacks' en
-          part.state === 'output-available' staan ze in part.output (een lijst SnackDto's).
-          Zet ze om met toSnack en toon ze met dezelfde <SnackCard> als het menu.
-          onAdd is de add-functie uit useCart().
-  STAP 3  Laat de assistent het mandje vullen: werk addToCart uit in onToolCall hieronder.
-  STAP 4  Laat de assistent navigeren: werk navigate uit in onToolCall hieronder.
-
-  Je AI-tool mag hier volop helpen. De vraag is: begrijp je wat hij bouwde?
-*/
+/** De chat staat in de layout, zodat hij open blijft als de assistent navigeert. */
 export function AssistantPanel() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
+  const navigate = useNavigate()
+  const { add } = useCart()
+  const { data: snacks = [] } = useSnacks()
 
   const { messages, sendMessage, addToolOutput, status, error } = useChat({
     transport,
     // Na de client tools stuurt useChat het gesprek automatisch terug naar de backend.
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    // useChat roept altijd de nieuwste versie van deze functie op: snacks en add zijn up-to-date.
     onToolCall({ toolCall }) {
       if (toolCall.dynamic) return
 
       if (toolCall.toolName === 'addToCart') {
-        // STAP 3: toolCall.input is { items: [{ id: 'friet-groot', quantity: 2 }, ...] }.
-        //         Zoek per item de snack op in de snacks van useSnacks()
-        //         en roep add(snack) zo vaak op als quantity zegt.
-        addToolOutput({ tool: 'addToCart', toolCallId: toolCall.toolCallId, output: { added: [] } })
+        const { items } = toolCall.input as { items: CartItem[] }
+        const added: string[] = []
+        for (const { id, quantity } of items) {
+          const snack = snacks.find(s => s.id === id)
+          if (!snack) continue
+          for (let i = 0; i < quantity; i++) add(snack)
+          added.push(id)
+        }
+        addToolOutput({ tool: 'addToCart', toolCallId: toolCall.toolCallId, output: { added } })
       }
 
       if (toolCall.toolName === 'navigate') {
-        // STAP 4: toolCall.input is { path: '/mandje' }. Navigeer met navigate(path) uit useNavigate().
+        const { path } = toolCall.input as { path: string }
+        navigate(path)
         addToolOutput({ tool: 'navigate', toolCallId: toolCall.toolCallId, output: { ok: true } })
       }
     },
   })
 
   const busy = status === 'submitted' || status === 'streaming'
-  console.log(messages)
 
   if (!open) {
     return (
@@ -80,8 +71,7 @@ export function AssistantPanel() {
         )}
         {messages.map(message => (
           <div key={message.id} className={`chat-message chat-message--${message.role}`}>
-            {/* STAP 1 en 2: toon hier de onderdelen van het bericht (message.parts) */}
-            <span className="chat-note">(nog niet zichtbaar: zie stap 1)</span>
+            {message.parts.map((part, index) => <MessagePart key={index} part={part} onAdd={add} />)}
           </div>
         ))}
         {status === 'submitted' && <p className="chat-note">De assistent denkt na…</p>}
@@ -110,4 +100,30 @@ export function AssistantPanel() {
       </form>
     </aside>
   )
+}
+
+type MessagePartProps = {
+  part: UIMessage['parts'][number]
+  onAdd: Parameters<typeof SnackCard>[0]['onAdd']
+}
+
+function MessagePart({ part, onAdd }: MessagePartProps) {
+  switch (part.type) {
+    case 'text':
+      return <span>{part.text}</span>
+    case 'tool-showSnacks':
+      if (part.state !== 'output-available') return <p className="chat-note">Even in het menu kijken…</p>
+      // Dezelfde SnackCard als op het menu: AI-features zijn gewoon React.
+      return (
+        <ul className="snack-grid">
+          {(part.output as SnackDto[]).map(toSnack).map(snack => (
+            <SnackCard key={snack.id} snack={snack} onAdd={onAdd} />
+          ))}
+        </ul>
+      )
+    case 'tool-addToCart':
+      return part.state === 'output-available' ? <p className="chat-note">🛒 In je mandje gestoken</p> : null
+    default:
+      return null
+  }
 }
