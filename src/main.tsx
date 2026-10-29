@@ -1,15 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-// STAP 1: haal de // weg op de volgende 2 regels
-// import { createBrowserRouter, RouterProvider } from 'react-router'
-// import { routes } from './app/routes.tsx'
+import { createBrowserRouter, RouterProvider } from 'react-router'
 import './index.css'
-import App from './app/App.tsx'
+import { routes } from './app/routes.tsx'
 
 const queryClient = new QueryClient()
-// STAP 1: haal de // weg op de volgende regel
-// const router = createBrowserRouter(routes)
+const router = createBrowserRouter(routes)
 
 // De app heeft geen echte snack-API: MSW speelt die na, ook offline.
 // Requests die MSW niet kent (zoals de chat in de finale) gaan gewoon door.
@@ -24,8 +21,7 @@ startMockApi().then(() => {
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        {/* STAP 1: vervang <App /> door <RouterProvider router={router} /> */}
-        <App />
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </StrictMode>,
   )

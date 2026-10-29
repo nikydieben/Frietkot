@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { useCart } from './CartContext'
 
 export function CartBadge() {
@@ -5,8 +6,8 @@ export function CartBadge() {
   const count = lines.reduce((sum, line) => sum + line.quantity, 0)
 
   return (
-    <span className="cart-badge" aria-label={`${count} items in je mandje`}>
+    <Link to="/mandje" className="cart-badge" aria-label={`${count} items in je mandje`}>
       🛒 {count}
-    </span>
+    </Link>
   )
 }

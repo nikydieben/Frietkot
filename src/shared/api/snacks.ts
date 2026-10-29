@@ -38,3 +38,13 @@ export async function getSnacks(): Promise<Snack[]> {
   const dtos: SnackDto[] = await response.json()
   return dtos.map(toSnack)
 }
+
+export async function updateSnackPrice(id: string, price: number): Promise<Snack> {
+  const response = await fetch(`/api/snacks/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ price_eur: price }),
+  })
+  if (!response.ok) throw new Error(`Prijs opslaan mislukt (${response.status})`)
+  return toSnack(await response.json())
+}

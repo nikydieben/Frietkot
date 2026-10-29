@@ -1,21 +1,27 @@
-import { Link } from 'react-router'
+import { Link, useParams } from 'react-router'
 import { formatPrice } from '../../shared/format'
 import { useCart } from '../cart/CartContext'
 import { useSnacks } from './useSnacks'
 
 export function SnackDetailPage() {
-  // STAP 4: haal de id uit de URL in plaats van deze vaste waarde: const { id } = useParams()
-  const id = 'friet-groot'
-  const { status, data: snacks } = useSnacks()
+  const { id } = useParams()
+  // Zelfde query als het menu: TanStack Query haalt de snacks niet opnieuw op.
+  const { status, data: snacks, error } = useSnacks()
   const { add } = useCart()
 
-  if (status !== 'success') return <p className="state state--loading">Snack laden…</p>
+  if (status === 'pending') return <p className="state state--loading">Snack laden…</p>
+  if (status === 'error') return <p className="state state--error" role="alert">{error.message}</p>
 
   const snack = snacks.find(s => s.id === id)
-
-  // STAP 4: bestaat de snack niet (snack is undefined)? Toon dan "Snack niet gevonden"
-  //         met een <Link to="/">Terug naar het menu</Link>
-  if (!snack) return null
+  if (!snack) {
+    return (
+      <section className="empty-state">
+        <h1>Snack niet gevonden</h1>
+        <p>Die snack staat niet op ons menu.</p>
+        <Link to="/">Terug naar het menu</Link>
+      </section>
+    )
+  }
 
   return (
     <article className="detail">
@@ -23,6 +29,7 @@ export function SnackDetailPage() {
       <div>
         <h1>{snack.name}</h1>
         <p>{formatPrice(snack.price)} · {snack.category}</p>
+        {snack.vegetarian && <p className="tag-veggie">vegetarisch</p>}
         <p>
           <button type="button" className="button button--primary" onClick={() => add(snack)}>
             Toevoegen aan mandje
