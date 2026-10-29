@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet, useNavigation } from 'react-router'
+import { AssistantPanel } from '../features/assistant/AssistantPanel'
 import { CartBadge } from '../features/cart/CartBadge'
 import { CartProvider } from '../features/cart/CartContext'
 
@@ -23,6 +24,8 @@ export default function App() {
           {navigation.state === 'loading' && <p className="state state--loading" role="status">Pagina laden…</p>}
           <Outlet />
         </main>
+
+        <AssistantPanel />
 
         <footer className="app-footer">Frietkot · React foundations voor .NET'ers</footer>
       </div>

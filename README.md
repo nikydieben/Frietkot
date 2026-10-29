@@ -67,6 +67,18 @@ Je hoeft geen CSS te schrijven. Alle klassen staan klaar in `src/index.css`:
 | `state state--loading`, `state state--error`, `empty-state`    | Laden, fout, leeg        |
 | `admin-table`                                                  | Prijzen beheren          |
 | `chat`, `chat-log`, `chat-message--user/--assistant`, `chat-form` | Chat (finale)         |
+| `assistant-toggle`, `assistant-panel`, `chat-note`             | Assistent-paneel (finale) |
+
+## Finale: de assistent
+
+De chat praat met een nep-assistent in MSW ([src/mocks/assistant.ts](src/mocks/assistant.ts)), net als de snack-API. Geen AI, geen API-key, en ook offline. Hij spreekt hetzelfde protocol als een echte AI-backend en kent een paar vragen:
+
+- "We zijn met 4, budget 30 euro, 1 vegetariër"
+- "Wat is er vegetarisch?" of "Welke sauzen hebben jullie?"
+- "Doe er 2 grote frieten bij"
+- "Toon mijn mandje"
+
+De echte assistent (met Claude) staat in de repo `frietkot-api`. Draait die lokaal, zet dan in `.env.local`: `VITE_ASSISTANT_API=http://localhost:5080/api/chat`.
 
 ## In de browser werken
 

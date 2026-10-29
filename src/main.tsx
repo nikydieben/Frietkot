@@ -9,7 +9,7 @@ const queryClient = new QueryClient()
 const router = createBrowserRouter(routes)
 
 // De app heeft geen echte snack-API: MSW speelt die na, ook offline.
-// Requests die MSW niet kent (zoals de chat in de finale) gaan gewoon door.
+// Ook de assistent van de finale is nep. Requests die MSW niet kent (zoals de echte backend) gaan gewoon door.
 async function startMockApi() {
   const { worker } = await import('./mocks/browser')
   const { mockApi } = await import('./mocks/handlers')
