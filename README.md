@@ -23,7 +23,7 @@ Elke branch is de beginsituatie van een blok. Loop je achter? Check de volgende 
 | `02-state`    | State management           |
 | `03-routing`  | Routing                    |
 | `04-bundling` | Bundling                   |
-| `05-testing`  | Testing: bug hunt          |
+| `05-testing`  | Testing                    |
 | `06-finale`   | Finale: Frietkot-assistent |
 | `solution`    | Alles af                   |
 

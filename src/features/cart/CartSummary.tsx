@@ -1,9 +1,10 @@
 import { formatPrice } from '../../shared/format'
+import { cartTotal, friesDiscount } from './cart'
 import { useCart } from './CartContext'
 
 export function CartSummary() {
   const { lines, add, removeOne } = useCart()
-  const total = lines.reduce((sum, line) => sum + line.snack.price * line.quantity, 0)
+  const discount = friesDiscount(lines)
 
   return (
     <section className="cart" aria-label="Inhoud van je mandje">
@@ -16,9 +17,15 @@ export function CartSummary() {
           <button type="button" className="button" aria-label={`Eén ${snack.name} meer`} onClick={() => add(snack)}>+</button>
         </div>
       ))}
+      {discount > 0 && (
+        <div className="cart-line">
+          <span className="cart-line__name">🎉 Frietkorting (10%)</span>
+          <span>− {formatPrice(discount)}</span>
+        </div>
+      )}
       <div className="cart-total">
         <span>Totaal</span>
-        <output aria-label="Totaal">{formatPrice(total)}</output>
+        <output aria-label="Totaal">{formatPrice(cartTotal(lines))}</output>
       </div>
     </section>
   )
