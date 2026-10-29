@@ -1,0 +1,29 @@
+import { formatPrice } from '../../shared/format'
+import type { CartLine } from './types'
+
+type CartSummaryProps = {
+  lines: CartLine[]
+}
+
+export function CartSummary({ lines }: CartSummaryProps) {
+  // STAP 5: bereken het totaal: per lijn snack.price * quantity, alles opgeteld.
+  // Dat is derived state: je berekent het, je slaat het niet op. Zie SPIEKBRIEF.md.
+  const total = 0
+
+  return (
+    <section className="cart" aria-label="Inhoud van je mandje">
+      <h2>Mandje</h2>
+      {lines.length === 0 && <p className="empty-state">Je mandje is nog leeg.</p>}
+      {lines.map(({ snack, quantity }) => (
+        <div key={snack.id} className="cart-line">
+          <span className="cart-line__name">{snack.emoji} {snack.name}</span>
+          <span className="cart-line__quantity">{quantity}</span>
+        </div>
+      ))}
+      <div className="cart-total">
+        <span>Totaal</span>
+        <output aria-label="Totaal">{formatPrice(total)}</output>
+      </div>
+    </section>
+  )
+}
