@@ -1,9 +1,11 @@
-import { Link, NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet, useNavigation } from 'react-router'
 import { CartBadge } from '../features/cart/CartBadge'
 import { CartProvider } from '../features/cart/CartContext'
 
 /** Layout-route: de header en het mandje blijven, de pagina komt in de Outlet. */
 export default function App() {
+  const navigation = useNavigation()
+
   return (
     <CartProvider>
       <div className="app">
@@ -18,6 +20,7 @@ export default function App() {
         </header>
 
         <main className="app-main">
+          {navigation.state === 'loading' && <p className="state state--loading" role="status">Pagina laden…</p>}
           <Outlet />
         </main>
 
