@@ -1,4 +1,4 @@
-import { createContext, use, useState, type ReactNode } from 'react'
+import { createContext, use, useEffect, useState, type ReactNode } from 'react'
 import type { Snack } from '../../shared/api/snacks'
 import { addSnack, removeOne } from './cartLines'
 import type { CartLine } from './types'
@@ -10,6 +10,19 @@ type CartValue = {
 }
 
 const CartContext = createContext<CartValue | null>(null)
+
+const STORAGE_KEY = 'frietkot.mandje'
+
+/** Het bewaarde mandje, of een leeg mandje als er niets (leesbaars) bewaard is. */
+function loadLines(): CartLine[] {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    const parsed: unknown = saved ? JSON.parse(saved) : []
+    return Array.isArray(parsed) ? (parsed as CartLine[]) : []
+  } catch {
+    return []
+  }
+}
 
 /*
   OEFENING 3: EFFECTS, HET MANDJE ONTHOUDEN (15 minuten)
@@ -30,10 +43,13 @@ const CartContext = createContext<CartValue | null>(null)
 
 /** Het mandje voor de hele app. Alles binnen <CartProvider> kan het mandje gebruiken. */
 export function CartProvider({ children }: { children: ReactNode }) {
-  // STAP 2: begin met het bewaarde mandje in plaats van een lege lijst
-  const [lines, setLines] = useState<CartLine[]>([])
+  // Een functie als beginwaarde: React leest localStorage enkel bij de eerste render.
+  const [lines, setLines] = useState<CartLine[]>(loadLines)
 
-  // STAP 1: bewaar het mandje telkens als het verandert
+  // Synchroniseren met de buitenwereld: na elke render waarin lines veranderde.
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(lines))
+  }, [lines])
 
   const value: CartValue = {
     lines,
