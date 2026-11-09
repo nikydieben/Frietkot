@@ -7,6 +7,7 @@ type CartValue = {
   lines: CartLine[]
   add: (snack: Snack) => void
   removeOne: (snackId: string) => void
+  clear: () => void
 }
 
 const CartContext = createContext<CartValue | null>(null)
@@ -38,6 +39,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     lines,
     add: snack => setLines(current => addSnack(current, snack)),
     removeOne: snackId => setLines(current => removeOne(current, snackId)),
+    clear: () => setLines([]),
   }
 
   return <CartContext value={value}>{children}</CartContext>

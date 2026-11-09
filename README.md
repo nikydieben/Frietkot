@@ -77,6 +77,7 @@ Je hoeft geen CSS te schrijven. Alle klassen staan klaar in `src/index.css`:
 | `detail`, `detail__emoji`                                      | Detailpagina             |
 | `state state--loading`, `state state--error`, `empty-state`    | Laden, fout, leeg        |
 | `admin-table`                                                  | Prijzen beheren          |
+| `checkout`, `field`, `field__error`, `choice`, `confirmation`  | Bestellen                |
 
 ## In de browser werken
 

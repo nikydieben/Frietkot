@@ -242,6 +242,114 @@ const category = searchParams.get('categorie')
 setSearchParams({ categorie: 'frieten' })
 ```
 
+## Formulieren
+
+### Een controlled input
+
+```tsx
+const [name, setName] = useState('')
+
+<label htmlFor="name">Naam</label>
+<input id="name" value={name} onChange={event => setName(event.target.value)} />
+```
+
+De waarde zit in state, React toont ze. Vergelijk met `@bind-Value` in Blazor.
+
+### Versturen en valideren
+
+```tsx
+function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault() // anders herlaadt de browser de pagina
+  const errors = validate(name, time)
+  setErrors(errors)
+  if (Object.keys(errors).length === 0) mutation.mutate({ name, time, address: null, lines })
+}
+
+/** Valideren is gewone code: een functie die de fouten teruggeeft. Leeg = geldig. */
+function validate(name: string, time: string) {
+  const errors: { name?: string; time?: string } = {}
+  if (!name.trim()) errors.name = 'Vul je naam in'
+  // ... en het tijdstip
+  return errors
+}
+
+<form onSubmit={handleSubmit} noValidate>
+  <input id="name" aria-invalid={!!errors.name} aria-describedby="name-error" ... />
+  {errors.name && <p id="name-error" className="field__error">{errors.name}</p>}
+  <button type="submit">Bestellen</button>
+</form>
+```
+
+Valideren doe je zelf, in gewone code. Vergelijk met `EditForm` en `DataAnnotations`, waar Blazor dat voor je doet. `noValidate` zet de meldingen van de browser zelf uit, zodat enkel de jouwe verschijnen. Het adres is `null` tot je stap 6 doet.
+
+### Een Field-component
+
+```tsx
+/** Een label, het veld zelf, en de fout eronder. */
+function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: ReactNode }) {
+  return (
+    <div className="field">
+      <label htmlFor={id}>{label}</label>
+      {children}
+      {error && <p id={`${id}-error`} className="field__error">{error}</p>}
+    </div>
+  )
+}
+
+<Field id="name" label="Naam" error={errors.name}>
+  <input id="name" value={name} onChange={event => setName(event.target.value)}
+    aria-invalid={!!errors.name} aria-describedby={errors.name ? 'name-error' : undefined} />
+</Field>
+```
+
+`children` is wat tussen de tags staat, zoals bij composition. `aria-describedby` koppelt de fout aan het veld: een schermlezer leest ze voor, en een test vindt ze met `toHaveAccessibleDescription`.
+
+### Schrijven naar de API: `useMutation`
+
+```tsx
+const navigate = useNavigate()
+const mutation = useMutation({
+  mutationFn: placeOrder,
+  onSuccess: order => {
+    clear() // uit useCart()
+    navigate(`/bestelling/${order.number}`)
+  },
+})
+
+mutation.isPending // bezig? zet de knop uit
+mutation.isError   // mislukt? mutation.error.message
+```
+
+`useQuery` leest, `useMutation` schrijft.
+
+### Lezen met een parameter uit de URL
+
+```tsx
+// route: bestelling/:nummer
+const { nummer } = useParams()
+const { status, data: order } = useQuery({
+  queryKey: ['order', nummer],
+  queryFn: () => getOrder(Number(nummer)),
+  retry: false, // niet gevonden? Toon dat meteen, zonder 3 nieuwe pogingen
+})
+```
+
+De nep-API onthoudt bestellingen tot je de pagina herlaadt: na F5 is een bestelling "niet gevonden".
+
+### Een veld dat enkel soms verschijnt
+
+```tsx
+<fieldset className="choice">
+  <legend>Afhalen of levering</legend>
+  <label><input type="radio" name="method" checked={method === 'afhalen'} onChange={() => setMethod('afhalen')} /> Afhalen</label>
+  <label><input type="radio" name="method" checked={method === 'levering'} onChange={() => setMethod('levering')} /> Levering</label>
+</fieldset>
+
+{method === 'levering' && <input value={address} onChange={...} />}
+```
+
+Een `<fieldset>` met een `<legend>` groepeert de radio buttons: een schermlezer zegt bij elke knop waarover de keuze gaat.
+
 ## Testing
 
 ### Een test
