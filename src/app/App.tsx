@@ -1,9 +1,6 @@
+import { Link, NavLink, Outlet } from 'react-router'
 import { CartBadge } from '../features/cart/CartBadge'
 import { CartProvider } from '../features/cart/CartContext'
-import { CartSummary } from '../features/cart/CartSummary'
-import { MenuPage } from '../features/menu/MenuPage'
-// STAP 2: haal de // weg op de volgende regel
-// import { Outlet } from 'react-router'
 
 /*
   OEFENING 4: ROUTING (20 minuten)
@@ -24,21 +21,22 @@ import { MenuPage } from '../features/menu/MenuPage'
 
   Vroeg klaar? Doe de bonusopdracht uit BONUS.md.
 */
+/** Layout-route: de header en het mandje blijven, de pagina komt in de Outlet. */
 export default function App() {
   return (
     <CartProvider>
       <div className="app">
         <header className="app-header">
-          <span className="logo">🍟 Frietkot</span>
-          {/* STAP 5: de navigatie */}
+          <Link className="logo" to="/">🍟 Frietkot</Link>
+          <nav className="app-nav" aria-label="Hoofdnavigatie">
+            <NavLink to="/" end>Menu</NavLink>
+            <NavLink to="/mandje">Mandje</NavLink>
+          </nav>
           <CartBadge />
         </header>
 
         <main className="app-main">
-          {/* STAP 2: hier komt de pagina van de huidige route */}
-          <MenuPage />
-          <h2>Mandje</h2>
-          <CartSummary />
+          <Outlet />
         </main>
 
         <footer className="app-footer">Frietkot · React foundations voor .NET'ers</footer>

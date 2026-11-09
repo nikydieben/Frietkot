@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router'
 import { useCart } from './CartContext'
 
 export function CartBadge() {
@@ -10,8 +11,8 @@ export function CartBadge() {
   }, [count])
 
   return (
-    <span className="cart-badge" aria-label={`${count} items in je mandje`}>
+    <Link to="/mandje" className="cart-badge" aria-label={`${count} items in je mandje`}>
       🛒 {count}
-    </span>
+    </Link>
   )
 }
