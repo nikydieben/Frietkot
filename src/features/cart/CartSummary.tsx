@@ -6,9 +6,7 @@ type CartSummaryProps = {
 }
 
 export function CartSummary({ lines }: CartSummaryProps) {
-  // STAP 5: bereken het totaal: per lijn snack.price * quantity, alles opgeteld.
-  // Dat is derived state: je berekent het, je slaat het niet op. Zie SPIEKBRIEF.md.
-  const total = 0
+  const total = lines.reduce((sum, line) => sum + line.snack.price * line.quantity, 0)
 
   return (
     <section className="cart" aria-label="Inhoud van je mandje">

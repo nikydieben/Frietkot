@@ -1,10 +1,9 @@
 import { MenuPage } from '../features/menu/MenuPage'
-// STAP 1: haal de // weg op de volgende regels
-// import { useState } from 'react'
-// import type { Snack } from '../shared/api/snacks'
-// import { addSnack } from '../features/cart/cartLines'
-// import type { CartLine } from '../features/cart/types'
-// import { CartSummary } from '../features/cart/CartSummary'
+import { useState } from 'react'
+import type { Snack } from '../shared/api/snacks'
+import { addSnack } from '../features/cart/cartLines'
+import type { CartLine } from '../features/cart/types'
+import { CartSummary } from '../features/cart/CartSummary'
 
 /*
   OEFENING 2: STATE MANAGEMENT (22 minuten)
@@ -25,17 +24,26 @@ import { MenuPage } from '../features/menu/MenuPage'
   Bonus: hetzelfde mandje met Jotai (zie BONUS.md).
 */
 export default function App() {
+  const [lines, setLines] = useState<CartLine[]>([])
+
+  function add(snack: Snack) {
+    setLines(current => addSnack(current, snack))
+  }
+
+  const count = lines.reduce((sum, line) => sum + line.quantity, 0)
+
   return (
     <div className="app">
       <header className="app-header">
         <span className="logo">🍟 Frietkot</span>
-        {/* STAP 4: het aantal stuks in je mandje */}
+        <span className="cart-badge" aria-label={`${count} items in je mandje`}>
+          🛒 {count}
+        </span>
       </header>
 
       <main className="app-main">
-        {/* STAP 3: geef hier jouw functie mee aan MenuPage */}
-        <MenuPage onAdd={snack => console.info(`${snack.name} toevoegen`)} />
-        {/* STAP 5: het mandje */}
+        <MenuPage onAdd={add} />
+        <CartSummary lines={lines} />
       </main>
 
       <footer className="app-footer">Frietkot · React foundations voor .NET'ers</footer>
