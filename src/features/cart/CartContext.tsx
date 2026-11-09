@@ -1,6 +1,6 @@
 import { createContext, use, useEffect, useState, type ReactNode } from 'react'
 import type { Snack } from '../../shared/api/snacks'
-import { addSnack, removeOne } from './cartLines'
+import { addSnack, removeOne } from './cart'
 import type { CartLine } from './types'
 
 type CartValue = {

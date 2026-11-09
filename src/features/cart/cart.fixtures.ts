@@ -1,5 +1,5 @@
 import type { Snack, SnackCategory } from '../../shared/api/snacks'
-import { addSnack } from './cartLines'
+import { addSnack } from './cart'
 import type { CartLine } from './types'
 
 const snack = (id: string, name: string, price: number, category: SnackCategory): Snack =>

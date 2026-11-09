@@ -24,6 +24,6 @@ test('snacks toevoegen werkt de badge en het mandje bij', async () => {
   expect(screen.getByRole('heading', { name: 'Mandje' })).toBeInTheDocument()
   expect(screen.getByRole('status', { name: 'Totaal' })).toHaveTextContent('9,10')
 
-  await user.click(screen.getByRole('button', { name: 'Eén Grote friet minder' }))
+  await user.click(screen.getByRole('button', { name: 'Eén Mayonaise minder' }))
   expect(screen.getByRole('link', { name: '2 items in je mandje' })).toBeInTheDocument()
 })

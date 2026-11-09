@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router'
+import { itemCount } from './cart'
 import { useCart } from './CartContext'
 
 export function CartBadge() {
   const { lines } = useCart()
-  const count = lines.reduce((sum, line) => sum + line.quantity, 0)
+  const count = itemCount(lines)
 
   useEffect(() => {
     document.title = count > 0 ? `(${count}) Frietkot` : 'Frietkot'
