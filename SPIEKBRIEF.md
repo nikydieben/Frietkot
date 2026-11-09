@@ -140,6 +140,55 @@ Vergelijk met een service die je via DI krijgt, of met `[CascadingParameter]` in
 const { status, data, error } = useQuery({ queryKey: ['snacks'], queryFn: getSnacks })
 ```
 
+## Effects
+
+### `useEffect`: synchroniseren met de buitenwereld
+
+```tsx
+useEffect(() => {
+  document.title = `${count} items`
+}, [count])
+```
+
+Een effect draait ná het renderen. Vergelijk met `OnAfterRenderAsync` in Blazor.
+
+- `[count]`: opnieuw als `count` verandert
+- `[]`: één keer, na de eerste render
+- geen array: na elke render
+
+### Opruimen
+
+```tsx
+useEffect(() => {
+  const id = setInterval(tick, 1000)
+  return () => clearInterval(id)
+}, [])
+```
+
+Wat je teruggeeft, draait bij het verdwijnen van het component. Vergelijk met `IDisposable`.
+
+### Een beginwaarde die je moet berekenen
+
+```tsx
+const [value, setValue] = useState(() => readValue())
+```
+
+Geef je `useState` een functie, dan roept React die enkel bij de eerste render op. Geen effect nodig.
+
+### Je hebt misschien geen effect nodig
+
+- Iets berekenen uit state of props? Doe het tijdens het renderen (derived state)
+- Data ophalen? Gebruik `useQuery`
+- Iets doen na een klik? Doe het in de event handler
+
+### `localStorage`
+
+```ts
+localStorage.setItem('key', JSON.stringify(value))
+const saved = localStorage.getItem('key') // string of null
+const value = saved ? JSON.parse(saved) : []
+```
+
 ## Routing
 
 ### Routes op één plek

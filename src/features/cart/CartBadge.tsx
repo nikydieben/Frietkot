@@ -4,6 +4,8 @@ export function CartBadge() {
   const { lines } = useCart()
   const count = lines.reduce((sum, line) => sum + line.quantity, 0)
 
+  // STAP 3: het aantal items in de titel van het tabblad
+
   return (
     <span className="cart-badge" aria-label={`${count} items in je mandje`}>
       🛒 {count}

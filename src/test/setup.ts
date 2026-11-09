@@ -8,6 +8,8 @@ import { server } from '../mocks/server'
 beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
 afterEach(() => {
   cleanup()
+  localStorage.clear()
+  document.title = 'Frietkot'
   server.resetHandlers()
   mockApi.fail = false
 })

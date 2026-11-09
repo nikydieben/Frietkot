@@ -11,9 +11,29 @@ type CartValue = {
 
 const CartContext = createContext<CartValue | null>(null)
 
+/*
+  OEFENING 3: EFFECTS, HET MANDJE ONTHOUDEN (15 minuten)
+  Vast? Kijk in SPIEKBRIEF.md onder "Effects".
+
+  Probeer eerst: leg een paar snacks in je mandje en druk op F5. Alles weg.
+
+  STAP 1  Bewaar het mandje in localStorage, onder de sleutel 'frietkot.mandje', telkens als het verandert.
+          Kijk in DevTools (Application > Local Storage) of het er staat.
+  STAP 2  Lees het bewaarde mandje terug als de app start. Niets bewaard of onleesbaar? Begin dan leeg.
+          Hier heb je geen effect voor nodig.
+  STAP 3  CartBadge.tsx: zet het aantal items in de titel van het tabblad, zoals "(3) Frietkot".
+          Bij een leeg mandje is de titel gewoon "Frietkot".
+
+  STAP 4  Als er tijd is: trek STAP 1 en 2 samen in een eigen hook useLocalStorage(key, initial),
+          die werkt zoals useState maar de waarde bewaart.
+*/
+
 /** Het mandje voor de hele app. Alles binnen <CartProvider> kan het mandje gebruiken. */
 export function CartProvider({ children }: { children: ReactNode }) {
+  // STAP 2: begin met het bewaarde mandje in plaats van een lege lijst
   const [lines, setLines] = useState<CartLine[]>([])
+
+  // STAP 1: bewaar het mandje telkens als het verandert
 
   const value: CartValue = {
     lines,
