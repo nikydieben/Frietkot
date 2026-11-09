@@ -1,13 +1,10 @@
-import type { Snack } from '../../shared/api/snacks'
+import { useCart } from '../cart/CartContext'
 import { SnackCard } from './SnackCard'
 import { useSnacks } from './useSnacks'
 
-type MenuPageProps = {
-  onAdd: (snack: Snack) => void
-}
-
-export function MenuPage({ onAdd }: MenuPageProps) {
+export function MenuPage() {
   const result = useSnacks()
+  const { add } = useCart()
 
   return (
     <section>
@@ -18,7 +15,7 @@ export function MenuPage({ onAdd }: MenuPageProps) {
       {result.status === 'success' && (
         <ul className="snack-grid">
           {result.snacks.map(snack => (
-            <SnackCard key={snack.id} snack={snack} onAdd={onAdd} />
+            <SnackCard key={snack.id} snack={snack} onAdd={add} />
           ))}
         </ul>
       )}

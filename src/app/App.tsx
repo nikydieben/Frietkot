@@ -1,8 +1,6 @@
 import { MenuPage } from '../features/menu/MenuPage'
-import { useState } from 'react'
-import type { Snack } from '../shared/api/snacks'
-import { addSnack } from '../features/cart/cartLines'
-import type { CartLine } from '../features/cart/types'
+import { CartBadge } from '../features/cart/CartBadge'
+import { CartProvider } from '../features/cart/CartContext'
 import { CartSummary } from '../features/cart/CartSummary'
 
 /*
@@ -24,29 +22,21 @@ import { CartSummary } from '../features/cart/CartSummary'
   Bonus: hetzelfde mandje met Jotai (zie BONUS.md).
 */
 export default function App() {
-  const [lines, setLines] = useState<CartLine[]>([])
-
-  function add(snack: Snack) {
-    setLines(current => addSnack(current, snack))
-  }
-
-  const count = lines.reduce((sum, line) => sum + line.quantity, 0)
-
   return (
-    <div className="app">
-      <header className="app-header">
-        <span className="logo">🍟 Frietkot</span>
-        <span className="cart-badge" aria-label={`${count} items in je mandje`}>
-          🛒 {count}
-        </span>
-      </header>
+    <CartProvider>
+      <div className="app">
+        <header className="app-header">
+          <span className="logo">🍟 Frietkot</span>
+          <CartBadge />
+        </header>
 
-      <main className="app-main">
-        <MenuPage onAdd={add} />
-        <CartSummary lines={lines} />
-      </main>
+        <main className="app-main">
+          <MenuPage />
+          <CartSummary />
+        </main>
 
-      <footer className="app-footer">Frietkot · React foundations voor .NET'ers</footer>
-    </div>
+        <footer className="app-footer">Frietkot · React foundations voor .NET'ers</footer>
+      </div>
+    </CartProvider>
   )
 }

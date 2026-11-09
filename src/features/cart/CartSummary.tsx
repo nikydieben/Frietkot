@@ -1,11 +1,8 @@
 import { formatPrice } from '../../shared/format'
-import type { CartLine } from './types'
+import { useCart } from './CartContext'
 
-type CartSummaryProps = {
-  lines: CartLine[]
-}
-
-export function CartSummary({ lines }: CartSummaryProps) {
+export function CartSummary() {
+  const { lines } = useCart()
   const total = lines.reduce((sum, line) => sum + line.snack.price * line.quantity, 0)
 
   return (
