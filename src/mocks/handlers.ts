@@ -6,10 +6,14 @@ import snacks from './data/snacks.json'
 /** Zet `fail` op true om de foutstatus van de app te zien. In de browser: `?api=fout`. */
 export const mockApi = { fail: false }
 
-// Bestellingen, in het geheugen tot een refresh.
+// In-memory "database", zodat prijswijzigingen in de admin blijven tot een refresh.
+let snackData: SnackDto[] = structuredClone(snacks as SnackDto[])
+
+// Bestellingen, ook in het geheugen.
 let orders: OrderDto[] = []
 
 export function resetMockData() {
+  snackData = structuredClone(snacks as SnackDto[])
   orders = []
 }
 
@@ -26,7 +30,15 @@ export const handlers = [
   http.get('/api/snacks', async () => {
     await delay()
     if (mockApi.fail) return HttpResponse.json({ message: 'De frituurpan is stuk' }, { status: 500 })
-    return HttpResponse.json(snacks as SnackDto[])
+    return HttpResponse.json(snackData)
+  }),
+
+  http.patch<{ id: string }, { price_eur: number }>('/api/snacks/:id', async ({ params, request }) => {
+    await delay()
+    const snack = snackData.find(s => s.id === params.id)
+    if (!snack) return HttpResponse.json({ message: 'Onbekende snack' }, { status: 404 })
+    snack.price_eur = (await request.json()).price_eur
+    return HttpResponse.json(snack)
   }),
 
   http.post<never, OrderRequestDto>('/api/orders', async ({ request }) => {

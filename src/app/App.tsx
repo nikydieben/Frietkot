@@ -12,6 +12,7 @@ export default function App() {
           <nav className="app-nav" aria-label="Hoofdnavigatie">
             <NavLink to="/" end>Menu</NavLink>
             <NavLink to="/mandje">Mandje</NavLink>
+            <NavLink to="/admin">Beheer</NavLink>
           </nav>
           <CartBadge />
         </header>
